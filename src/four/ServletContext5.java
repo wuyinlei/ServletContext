@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -50,10 +51,11 @@ public class ServletContext5 extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		test11();
+		//test11();
+		test21();
 	}
 
-	// 获取p1资源文件的内容
+	// 第一种方式获取p1资源文件的内容
 	public void test11() {
 		ServletContext sc = this.getServletContext();
 		// 获取p1.properties这个文件的路径
@@ -69,6 +71,15 @@ public class ServletContext5 extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	// 第二种方式获取p1资源文件的内容   ResourceBundle
+	public void test21() {
+		//拿取ResourceBundle对象    这个对象是专门来获取properties文件的
+		ResourceBundle bundle =  ResourceBundle.getBundle("p1");
+		//拿取文件中的内容
+		System.out.println(bundle.getString("value"));
 
 	}
 
