@@ -3,6 +3,7 @@ package four;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -52,7 +53,8 @@ public class ServletContext5 extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		//test11();
-		test21();
+		//test21();
+		test31();
 	}
 
 	// 第一种方式获取p1资源文件的内容
@@ -82,5 +84,29 @@ public class ServletContext5 extends HttpServlet {
 		System.out.println(bundle.getString("value"));
 
 	}
+	
+	// 第三种方式获取p1资源文件的内容   类加载器
+		public void test31() {
+			
+			/**
+			 * 第一种：类名    ServletContext5.class.getName();
+			 * 第二种：对象   this.getClass().getName();
+			 * 第三种：Class.forName()   Class.forName("ServletContext5").getClassLoader();
+			 */
+			//获取类加载器的方式   默认路径是src  对应web路径是classes
+			InputStream is = this.getClass().getClassLoader().getResourceAsStream("p1.properties");
+			Properties prop = new Properties();
+			try {
+				prop.load(is);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			String value = prop.getProperty("value");
+			System.out.println(value);
+			
+			
+			
+		}
+
 
 }
