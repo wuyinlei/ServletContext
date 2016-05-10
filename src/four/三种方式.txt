@@ -1,0 +1,40 @@
+一、web工程中，不同位置的资源文件的读取方式
+  1、当资源文件在包下面时
+  InputStream in = this.getServletContext().getResourceAsStream("/WEB-INF/classes/cn/itcast/context/db.properties");
+  System.out.println(in);
+  
+  2、资源文件在web-inf下
+  in = this.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
+  System.out.println(in);
+  
+  3、资源文件在web工程中
+  in = this.getServletContext().getResourceAsStream("/db.properties");
+  System.out.println(in);
+  
+ 二、在非servlet程序中如何读取配置文件:用类装载器
+1）用类装载方式读取 
+ in = StudentDao.class.getClassLoader().getResourceAsStream("cn/itcast/context/db.properties");
+2）用类装载方式读取，把资源当作url对待
+ URL url = StudentDao.class.getClassLoader().getResource("db.properties");
+ 这样可以获得资源文件名称：String path = url.getPath();
+3）注意：在线程休眠过程中，即使改动了资源文件，获取到的还是原始内容
+解决方案：
+  URL url = StudentDao.class.getClassLoader().getResource("db.properties");
+  String path = url.getPath();
+  
+  FileInputStream in = new FileInputStream(path);
+  Properties prop = new Properties();
+  prop.load(in);
+  System.out.println(prop.getProperty("url"));
+  
+  try {
+   Thread.sleep(1000*15);
+  } catch (InterruptedException e) {
+    e.printStackTrace();
+  }
+  in = new FileInputStream(path);
+  prop = new Properties();
+  prop.load(in);
+  System.out.println(prop.getProperty("url"));
+ 
+4）注意：用类装载器读取资源文件时，千万要注意，资源文件绝对不能太大，否则极易导致内存溢出
